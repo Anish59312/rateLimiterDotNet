@@ -1,0 +1,6 @@
+@DemoApiRateLimiter_HostAddress = http://localhost:5132
+
+GET {{DemoApiRateLimiter_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
