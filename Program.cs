@@ -37,6 +37,22 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests; // status code to 429
 });
 
+builder.Services.AddRateLimiter(rateLimiterOptions =>
+{
+    rateLimiterOptions.AddTokenBucketLimiter("tokenBucket", options =>
+    {
+        options.TokenLimit = 2; //burst capacity
+        options.TokensPerPeriod = 1;
+        options.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
+        options.QueueLimit = 5;
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.AutoReplenishment = true;
+
+    });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests; // status code to 429
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
