@@ -13,8 +13,9 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
     {
         options.PermitLimit = 5; // Allow 5 requests
         options.Window = TimeSpan.FromSeconds(10); // Per 10 seconds
-        options.QueueLimit = 0;
+        options.QueueLimit = 0; // QueueLimit = 0 => reject extra request
     });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests; // status code to 429
 });
 
 var app = builder.Build();
