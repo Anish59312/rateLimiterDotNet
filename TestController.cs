@@ -6,7 +6,7 @@ namespace DemoApiRateLimiter
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableRateLimiting("fixed")]
+    [EnableRateLimiting("fixed")] // mention the group of rate limiter being used
     public class TesterController : ControllerBase
     {
 
