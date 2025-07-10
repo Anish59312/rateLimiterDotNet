@@ -12,7 +12,7 @@ namespace DemoApiRateLimiter
             [HttpGet]
             public IActionResult Get()
             {
-                return Ok("Hello from test1 controller");
+                return Ok("Hello from test2 controller");
             }
 
     }
