@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,21 @@ builder.Services.AddRateLimiter(rateLimiterOptions =>
         options.PermitLimit = 5; // Allow 5 requests
         options.Window = TimeSpan.FromSeconds(10); // Per 10 seconds
         options.QueueLimit = 0; // QueueLimit = 0 => reject extra request
+    });
+    rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests; // status code to 429
+});
+
+/* each segement counts the requests made,
+but queued request get replished only after widow is over*/
+builder.Services.AddRateLimiter(rateLimiterOptions =>
+{
+    rateLimiterOptions.AddSlidingWindowLimiter("slidingWindow", options =>
+    {
+        options.PermitLimit = 2; // Allow requests
+        options.Window = TimeSpan.FromSeconds(5); // window sliding rate
+        options.SegmentsPerWindow = 5;
+        options.QueueLimit = 5; // QueueLimit != 0 => for sliding window
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
     rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests; // status code to 429
 });
